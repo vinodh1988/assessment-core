@@ -408,3 +408,62 @@ def download_excel():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/lockedstatus', methods=['GET'])
+def get_locked_assessments():
+    try:
+        # Retrieve the 'assessmentCode' from the query parameters
+        assessment_code = request.args.get('assessmentCode')
+
+        if not assessment_code:
+            return jsonify({"error": "Missing 'assessmentCode' parameter"}), 400
+
+        # Access the assessment_status collection
+        status_collection = mongo_assessments.db.assessment_status
+        
+        # Query documents with the given assessmentCode and status 'locked'
+        results = status_collection.find({"assessmentcode": assessment_code, "testStatus": "locked"},
+                                         {"_id": 0, "name": 1, "email": 1, "currentDuration": 1, "assessmentcode":1})
+
+        # Convert the cursor to a list of documents
+        result_list = list(results)
+
+        if len(result_list)==0:
+            return jsonify([]), 200
+
+        return jsonify(result_list), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/assessment/unlock', methods=['POST'])
+def unlock_assessment():
+    try:
+        # Extract JSON data from the request
+        data = request.get_json()
+
+        if not data or 'email' not in data or 'assessmentCode' not in data:
+            return jsonify({"error": "Missing 'email' or 'assessmentCode' in the request body"}), 400
+
+        email = data['email']
+        assessment_code = data['assessmentCode']
+
+        # Access the assessment_status collection
+        status_collection = mongo_assessments.db.assessment_status
+        
+        # Find the record with matching email and assessmentCode
+        result = status_collection.find_one({"email": email, "assessmentcode": assessment_code})
+
+        if not result:
+            return jsonify({"error": "No assessment found for the provided email and assessmentCode"}), 404
+
+        # Update the status to 'unlocked'
+        status_collection.update_one(
+            {"email": email, "assessmentcode": assessment_code},
+            {"$set": {"testStatus": False}}
+        )
+
+        return jsonify({"message": "Assessment unlocked successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
