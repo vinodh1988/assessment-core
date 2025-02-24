@@ -1,0 +1,79 @@
+.assessment-health-dashboard {
+    padding: 20px;
+  }
+  
+  .chart-container {
+    
+    overflow: hidden;
+    margin-bottom: 30px;
+ 
+  }
+  
+  .chart-container div {
+  
+
+    float: left;
+    max-width: 45%;
+    box-sizing: border-box;
+    padding: 30px;
+    margin: 20px;
+    border: 1px solid rgb(247, 244, 244);
+    box-shadow: 1px 1px 1px lightgray;
+  }
+  #scoredistribution {
+    width: 90%;
+    margin: 20px;
+    padding: 30px;
+    margin: 20px;
+    border: 1px solid rgb(244, 239, 239);
+    box-shadow: 2px 2px 2px rgb(246, 244, 244);
+  }
+  
+  .summary-section {
+    text-align: left;
+    margin-bottom: 30px;
+  }
+  
+  .summary-section h3{
+    text-align: center;
+    color: rgb(5, 5, 62);
+    font-weight: bold;
+  }
+  .participant-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .participant-list th, .participant-list td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .participant-list th {
+    background-color: #f4f4f4;
+  }
+  
+  button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .view-btn {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
