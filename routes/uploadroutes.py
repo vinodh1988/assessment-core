@@ -27,9 +27,6 @@ def project_uploads():
     if not (allowed_file(src.filename, {'zip'}) and allowed_file(presentation.filename, {'pdf'}) and allowed_file(screenshots.filename, {'zip'})):
         return jsonify({'error': 'Invalid file type'}), 400
 
-    if src.mimetype != 'application/zip' or presentation.mimetype != 'application/pdf' or screenshots.mimetype != 'application/zip':
-        return jsonify({'error': 'Invalid file type'}), 400
-
     if len(src.read()) > 100 * 1024:
         return jsonify({'error': 'src file too large'}), 400
     src.seek(0)
