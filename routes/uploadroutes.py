@@ -63,7 +63,7 @@ def project_uploads():
         'screenshots': screenshots_filename,
         'folder_path': user_folder_path
     }
-    collection = mongo_assessments['filedetails']
+    collection = mongo_assessments.db.filedetails
     collection.insert_one(file_details)
 
     return jsonify({'message': 'Files uploaded successfully'}), 200
