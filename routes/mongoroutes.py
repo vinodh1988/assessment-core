@@ -1336,3 +1336,51 @@ def get_completed_assessments():
 
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
+            
+
+@app.route('/spring-boot-code-questions', methods=['POST'])
+def upload_spring_boot_code_question():
+        try:
+            # Check if the request contains the 'name' and 'file' fields
+            if 'name' not in request.form or 'file' not in request.files:
+                return jsonify({"error": "Missing 'name' or 'file' in the request"}), 400
+
+            name = request.form['name']
+            file = request.files['file']
+
+                    # Check if the file is a PDF
+            if not file.filename.lower().endswith('.pdf'):
+                return jsonify({"error": "File must have a .pdf extension"}), 400
+
+                    # Check if the file size is less than 15 MB
+            if len(file.read()) > 15 * 1024 * 1024:
+                return jsonify({"error": "File size must be less than 15 MB"}), 400
+
+                    # Reset the file pointer to the beginning
+            file.seek(0)
+
+                    # Create the uploads directory if it doesn't exist
+            upload_folder = 'uploads/spring-questions'
+            os.makedirs(upload_folder, exist_ok=True)
+
+                    # Save the file to the uploads directory
+            filename = file.filename
+            file_path = os.path.join(upload_folder, filename)
+            file.save(file_path)
+
+                    # Access the spring_boot_questions collection
+            spring_boot_questions_collection = mongo_assessments.db.spring_boot_questions
+
+                    # Insert the name and filename into the collection
+            result = spring_boot_questions_collection.insert_one({
+                        "name": name,
+                        "filename": filename
+                    })
+
+            return jsonify({
+                        "message": "File uploaded and record created successfully",
+                        "inserted_id": str(result.inserted_id)  # Return the MongoDB ObjectId
+                    }), 201
+
+        except Exception as e:
+                    return jsonify({"error": str(e)}), 500
