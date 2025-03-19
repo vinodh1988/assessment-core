@@ -1384,3 +1384,45 @@ def upload_spring_boot_code_question():
 
         except Exception as e:
                     return jsonify({"error": str(e)}), 500
+        
+@app.route('/spring-assessments', methods=['POST'])
+def create_spring_assessment():
+            try:
+                # Get JSON data from request
+                data = request.get_json()
+
+                if not data or 'name' not in data or 'batchname' not in data:
+                    return jsonify({"error": "Missing 'name' or 'batchname' in the request body"}), 400
+
+                name = data['name']
+                batchname = data['batchname']
+
+                # Generate a unique assessment code
+                assessment_code = hashlib.md5(str(uuid.uuid4()).encode()).hexdigest()
+
+                # Get the current date for assessmentDate
+                assessment_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
+                # Create the new assessment
+                new_assessment = {
+                    "assessmentcode": assessment_code,
+                    "name": name,
+                    "batchname": batchname,
+                    "status": "active",
+                    "assessmentdate": assessment_date
+                }
+
+                # Access the spring_boot_assessments collection
+                spring_assessments_collection = mongo_assessments.db.spring_boot_assessments
+
+                # Insert the new assessment into the collection
+                result = spring_assessments_collection.insert_one(new_assessment)
+
+                return jsonify({
+                    "message": "Spring Boot assessment successfully created",
+                    "assessmentcode": assessment_code,
+                    "assessmentdate": assessment_date
+                }), 201
+
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
