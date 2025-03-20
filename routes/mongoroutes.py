@@ -1495,7 +1495,7 @@ def get_spring_boot_file(fname):
     try:
             if fname == 'instructions':
                 filename = 'Project-Instructions.pdf'
-                file_path = os.path.join('uploads/spring-questions', filename)
+                file_path = os.path.join('../uploads/spring-questions', filename)
                 if not os.path.exists(file_path):
                     return jsonify({"error": "File not found on server"}), 404
                 return send_file(file_path, as_attachment=True, download_name=filename)
