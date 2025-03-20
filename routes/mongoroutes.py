@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify,send_file
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import json
-from config import app,mongo,mongo_assessments,basedir
+from config import app,mongo,mongo_assessments
+from base import basedir
 import uuid
 import random
 import pandas as pd
