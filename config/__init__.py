@@ -94,7 +94,7 @@ def check_jwt():
     if request.method == 'OPTIONS':
         return '', 204 
     # Allow certain routes to bypass JWT check (e.g., login and register)
-    if request.path in ['/login', '/register']:
+    if request.path in ['/login', '/register'] or request.path.startswith('/spring-boot-files/'):
         return None  # Bypass JWT validation for these routes
 
       # Allow certain routes to be accessed using API Key instead of JWT
