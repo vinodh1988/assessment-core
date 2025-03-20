@@ -1426,3 +1426,66 @@ def create_spring_assessment():
 
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
+
+@app.route('/spring-assessments/<assessmentcode>', methods=['GET'])
+def get_spring_assessment(assessmentcode):
+                try:
+                    # Access the spring_boot_assessments collection
+                    spring_assessments_collection = mongo_assessments.db.spring_boot_assessments
+
+                    # Retrieve the spring assessment based on the assessmentcode
+                    spring_assessment = spring_assessments_collection.find_one({"assessmentcode": assessmentcode}, {"_id": 0})
+
+                    if not spring_assessment:
+                        return jsonify({"error": "Spring assessment not found"}), 404
+
+                    return jsonify(spring_assessment), 200
+
+                except Exception as e:
+                    return jsonify({"error": str(e)}), 500
+                    
+@app.route('/spring-assessment-details/<assessmentcode>', methods=['GET'])
+def get_spring_assessment_details(assessmentcode):
+    try:
+        # Retrieve the 'email' from the query parameters
+        email = request.args.get('email')
+
+        if not email:
+            return jsonify({"error": "Missing 'email' parameter"}), 400
+    # Access the spring_boot_assessments collection
+        spring_assessments_collection = mongo_assessments.db.spring_boot_assessments
+
+       # Retrieve the spring assessment based on the assessmentcode
+        spring_assessment = spring_assessments_collection.find_one({"assessmentcode": assessmentcode}, {"_id": 0})
+
+        if not spring_assessment:
+            return jsonify({"error": "Spring assessment not found"}), 404
+
+        # Access the spring_boot_assessment_status collection
+        spring_assessment_status_collection = mongo_assessments.db.spring_boot_assessment_status
+
+        # Retrieve the assessment status based on the assessmentcode
+        assessment_status = spring_assessment_status_collection.find_one({"assessmentcode": assessmentcode,email: email}, {"_id": 0})
+
+        if assessment_status and 'questionname' in assessment_status:
+            question_name = assessment_status['questionname']
+        else:
+                                # Access the spring_boot_questions collection
+            spring_questions_collection = mongo_assessments.db.spring_boot_questions
+
+                                # Retrieve all questions
+            questions = list(spring_questions_collection.find({}, {"_id": 0, "name": 1}))
+
+            if not questions:
+                return jsonify({"error": "No questions found"}), 404
+
+                # Select a random question name
+            question_name = random.choice(questions)['name']
+
+            # Add the question name to the spring assessment object
+            spring_assessment['questionname'] = question_name
+
+            return jsonify(spring_assessment), 200
+
+    except Exception as e:
+            return jsonify({"error": str(e)}), 500
