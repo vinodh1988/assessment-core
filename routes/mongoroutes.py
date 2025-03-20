@@ -1491,35 +1491,37 @@ def get_spring_assessment_details(assessmentcode):
     except Exception as e:
             return jsonify({"error": str(e)}), 500
     
+
 @app.route('/spring-boot-files/<fname>', methods=['GET'])
 def get_spring_boot_file(fname):
     try:
-            if fname == 'instructions':
-                filename = 'Project-Instructions.pdf'
-                file_path = basedir+'/uploads/spring-questions/'+ filename
-                if not os.path.exists(file_path):
-                    return jsonify({"error": "File not found on server"}), 404
-                return send_file(file_path, as_attachment=True, download_name=filename)
-            # Access the spring_boot_questions collection
-            spring_boot_questions_collection = mongo_assessments.db.spring_boot_questions
-
-            # Find the document with the matching name
-            document = spring_boot_questions_collection.find_one({"name": fname})
-
-            if not document:
-                return jsonify({"error": "File not found"}), 404
-
-            # Get the filename from the document
-            filename = document['filename']
-
-            # Construct the file path
-            file_path = basedir+'/uploads/spring-questions/'+ filename
-
+        if fname == 'instructions':
+            filename = 'Project-Instructions.pdf'
+            file_path = basedir + '/uploads/spring-questions/' + filename
             if not os.path.exists(file_path):
                 return jsonify({"error": "File not found on server"}), 404
+            return send_file(file_path, as_attachment=True, download_name=filename, mimetype='application/pdf')
+        
+        # Access the spring_boot_questions collection
+        spring_boot_questions_collection = mongo_assessments.db.spring_boot_questions
 
-            # Send the file for download
-            return send_file(file_path, as_attachment=True, download_name=filename)
+        # Find the document with the matching name
+        document = spring_boot_questions_collection.find_one({"name": fname})
+
+        if not document:
+            return jsonify({"error": "File not found"}), 404
+
+        # Get the filename from the document
+        filename = document['filename']
+
+        # Construct the file path
+        file_path = basedir + '/uploads/spring-questions/' + filename
+
+        if not os.path.exists(file_path):
+            return jsonify({"error": "File not found on server"}), 404
+
+        # Send the file for download
+        return send_file(file_path, as_attachment=True, download_name=filename, mimetype='application/pdf')
 
     except Exception as e:
-            return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
