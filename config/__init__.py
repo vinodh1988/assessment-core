@@ -98,7 +98,7 @@ def check_jwt():
         return None  # Bypass JWT validation for these routes
 
       # Allow certain routes to be accessed using API Key instead of JWT
-    if request.path.startswith('/assessments/') or request.path.startswith("/project-uploads") or request.path.startswith('/evaluate/') or request.path.startswith("/code-assessments") or request.path.startswith('/testdetails/') or request.path.startswith('/spring-boot-files/'):  # Add your paths here
+    if request.path.startswith('/assessments/') or request.path.startswith("/project-uploads") or request.path.startswith('/evaluate/') or request.path.startswith("/code-assessments") or request.path.startswith('/testdetails/') or request.path.startswith('/spring-assessment-details/') or request.path.startswith('/spring-assessments/'):  # Add your paths here
         try:
             authorization = request.headers['Authorization']
         except KeyError as e:
