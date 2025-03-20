@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify,send_file
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import json
-from config import app,mongo,mongo_assessments
+from config import app,mongo,mongo_assessments,basedir
 import uuid
 import random
 import pandas as pd
@@ -1495,7 +1495,7 @@ def get_spring_boot_file(fname):
     try:
             if fname == 'instructions':
                 filename = 'Project-Instructions.pdf'
-                file_path = os.path.join('../uploads/spring-questions', filename)
+                file_path = basedir.join('uploads/spring-questions', filename)
                 if not os.path.exists(file_path):
                     return jsonify({"error": "File not found on server"}), 404
                 return send_file(file_path, as_attachment=True, download_name=filename)
@@ -1512,7 +1512,7 @@ def get_spring_boot_file(fname):
             filename = document['filename']
 
             # Construct the file path
-            file_path = os.path.join('uploads/spring-questions', filename)
+            file_path = basedir.join('uploads/spring-questions', filename)
 
             if not os.path.exists(file_path):
                 return jsonify({"error": "File not found on server"}), 404
