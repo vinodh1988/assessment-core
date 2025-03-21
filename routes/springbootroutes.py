@@ -74,7 +74,7 @@ def upload_and_process():
                 "endpoint": result.get("endpoint"),
                 "status": result.get("status")
                  }
-            filtered_results.append(filtered_result)
+                filtered_results.append(filtered_result)
             test_results = filtered_results
             # Return test results as JSON
             return jsonify({"status": "success", "results": test_results})
