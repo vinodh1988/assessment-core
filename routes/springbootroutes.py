@@ -46,7 +46,7 @@ def upload_and_process():
     os.makedirs(zip_folder, exist_ok=True)
     file_path = os.path.join(zip_folder, file.filename)
     file.save(file_path)
-
+    
     # Acquire the global lock to ensure only one request processes at a time
     with LOCK:
         try:
@@ -66,7 +66,16 @@ def upload_and_process():
                 return jsonify({"error": "Invalid question name"}), 400
            
             terminate_application(app_process)
-            print(test_results)
+        # Filter test results to keep only specific properties
+            filtered_results = []
+            for result in test_results:
+                filtered_result = {
+                "testCase": result.get("testCase"),
+                "endpoint": result.get("endpoint"),
+                "status": result.get("status")
+                 }
+            filtered_results.append(filtered_result)
+            test_results = filtered_results
             # Return test results as JSON
             return jsonify({"status": "success", "results": test_results})
         except Exception as e:
