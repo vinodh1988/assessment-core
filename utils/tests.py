@@ -34,7 +34,7 @@ def replace_java_folder(zip_file,zip_path, project_path):
 # Step 2: Build the Spring Boot project using Maven
 def build_project(project_path):
     print("Building the Spring Boot project...")
-    maven_executable = "E:\\apache-maven-3.9.9\\bin\\mvn.cmd"
+    maven_executable = "/home/azureuser/apache-maven-3.9.9/bin/mvn"  # Adjust the path to Maven
     result = subprocess.run([maven_executable, "clean", "install"], cwd=project_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     print(result)
     if result.returncode == 0:
