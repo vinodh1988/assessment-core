@@ -1484,9 +1484,9 @@ def get_spring_assessment_details(assessmentcode):
             question_name = random.choice(questions)['name']
 
             # Add the question name to the spring assessment object
-            spring_assessment['questionname'] = question_name
+        spring_assessment['questionname'] = question_name
 
-            return jsonify(spring_assessment), 200
+        return jsonify(spring_assessment), 200
 
     except Exception as e:
             return jsonify({"error": str(e)}), 500
