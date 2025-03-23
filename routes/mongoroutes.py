@@ -1470,6 +1470,11 @@ def get_spring_assessment_details(assessmentcode):
 
         if assessment_status and 'questionname' in assessment_status:
             question_name = assessment_status['questionname']
+            if assessment_status['status'] == 'completed':
+                return jsonify({
+                    "assessment": spring_assessment,
+                    "questionname": "completed"
+                }), 200
         else:
                                 # Access the spring_boot_questions collection
             spring_questions_collection = mongo_assessments.db.spring_boot_questions
