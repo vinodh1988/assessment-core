@@ -1618,3 +1618,60 @@ def get_all_spring_boot_assessments():
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+        
+@app.route('/spring-assessments/completed', methods=['GET'])
+def get_completed_spring_assessments():
+            try:
+                # Retrieve the 'assessmentcode' from the query parameters
+                assessmentcode = request.args.get('assessmentcode')
+
+                if not assessmentcode:
+                    return jsonify({"error": "Missing 'assessmentcode' parameter"}), 400
+
+                # Access the spring_boot_assessment_status collection
+                status_collection = mongo_assessments.db.spring_boot_assessment_status
+
+                # Query documents with the given assessmentcode and status 'completed'
+                completed_assessments = list(status_collection.find(
+                    {"assessmentcode": assessmentcode, "status": "completed"},
+                    {"_id": 0}
+                ))
+
+                if not completed_assessments:
+                    return jsonify({"message": "No completed assessments found for the given assessmentcode"}), 404
+
+                return jsonify(completed_assessments), 200
+
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
+
+@app.route('/spring-assessments/update', methods=['PUT'])
+def update_spring_assessment():
+            try:
+                # Get JSON data from request
+                data = request.get_json()
+
+                if not data or 'assessmentcode' not in data:
+                    return jsonify({"error": "Missing 'assessmentcode' in the request body"}), 400
+
+                assessmentcode = data['assessmentcode']
+
+                # Access the spring_boot_assessments collection
+                assessments_collection = mongo_assessments.db.spring_boot_assessments
+
+                # Check if the assessment with the given assessmentcode exists
+                existing_assessment = assessments_collection.find_one({"assessmentcode": assessmentcode})
+
+                if not existing_assessment:
+                    return jsonify({"error": "Assessment not found"}), 404
+
+                # Update the assessment with the provided data
+                assessments_collection.update_one(
+                    {"assessmentcode": assessmentcode},
+                    {"$set": data}
+                )
+
+                return jsonify({"message": "Assessment updated successfully"}), 200
+
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
