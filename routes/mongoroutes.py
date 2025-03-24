@@ -1541,7 +1541,7 @@ def update_spring_assessment_status():
             return jsonify({"error": "No data provided"}), 400
 
         # Validate required fields
-        required_fields = ['assessmentcode', 'batchname', 'name', 'email', 'phone', 'status', 'testresults', 'score']
+        required_fields = ['assessmentcode', 'batchname', 'questioname','name', 'email', 'phone', 'status', 'testresults', 'score']
         for field in required_fields:
             if field not in data:
                 return jsonify({"error": f"Missing required field: {field}"}), 400
@@ -1554,6 +1554,7 @@ def update_spring_assessment_status():
         status = data['status']
         testresults = data['testresults']
         score = data['score']
+        questionname = data['questionname']
 
         # Access the spring_boot_assessment_status collection
         status_collection = mongo_assessments.db.spring_boot_assessment_status
@@ -1569,6 +1570,7 @@ def update_spring_assessment_status():
                     "batchname": batchname,
                     "name": name,
                     "phone": phone,
+                    "questioname": questionname,
                     "status": status,
                     "testresults": testresults,
                     "score": score
@@ -1583,6 +1585,7 @@ def update_spring_assessment_status():
                 "name": name,
                 "email": email,
                 "phone": phone,
+                "questioname": questionname,
                 "status": status,
                 "testresults": testresults,
                 "score": score
