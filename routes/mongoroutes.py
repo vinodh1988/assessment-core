@@ -1601,3 +1601,20 @@ def update_spring_assessment_status():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/spring-assessments', methods=['GET'])
+def get_all_spring_boot_assessments():
+        try:
+            # Access the spring_boot_assessments collection
+            spring_assessments_collection = mongo_assessments.db.spring_boot_assessments
+
+            # Retrieve all documents from the spring_boot_assessments collection, excluding the '_id' field
+            assessments = list(spring_assessments_collection.find({}, {"_id": 0}))
+
+            if not assessments:
+                return jsonify({"message": "No spring boot assessments found"}), 404
+
+            return jsonify(assessments), 200
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
