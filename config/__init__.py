@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
 from static import staticfilepath
+import logging
+
 basedir=os.path.abspath(os.path.dirname(__file__))
 
 print(basedir)
@@ -31,7 +33,22 @@ aiclient = OpenAI(api_key=config["openai_api_key"])
 
 
 app=Flask(__name__)
+
 app.config["MONGO_URI"] = "mongodb://localhost:27017/questionbanks_db"  # Change to your MongoDB URI
+
+
+# Set up console logging
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)  # You can adjust the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
+# Format the log messages
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+
+# Add the console handler to the Flask app logger
+app.logger.addHandler(console_handler)
+app.logger.setLevel(logging.DEBUG)  # Overall logging level
+
 mongo = PyMongo(app)
 
 app.config["ASSESSMENTS_MONGO_URI"] = "mongodb://localhost:27017/assessments_db"  # Different database

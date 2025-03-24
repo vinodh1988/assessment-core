@@ -1469,6 +1469,8 @@ def get_spring_assessment_details(assessmentcode):
         assessment_status = spring_assessment_status_collection.find_one({"assessmentcode": assessmentcode,email: email}, {"_id": 0})
 
         print("Log_1",assessment_status)
+        app.logger.info("Log_1",assessment_status)
+
         if assessment_status and 'questionname' in assessment_status:
             question_name = assessment_status['questionname']
             if assessment_status['status'] == 'completed':
