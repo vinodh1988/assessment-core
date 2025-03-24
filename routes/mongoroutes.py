@@ -1541,7 +1541,7 @@ def update_spring_assessment_status():
             return jsonify({"error": "No data provided"}), 400
 
         # Validate required fields
-        required_fields = ['assessmentcode', 'batchname', 'questioname','name', 'email', 'phone', 'status', 'testresults', 'score']
+        required_fields = ['assessmentcode', 'batchname', 'questionname','name', 'email', 'phone', 'status', 'testresults', 'score']
         for field in required_fields:
             if field not in data:
                 return jsonify({"error": f"Missing required field: {field}"}), 400
@@ -1570,7 +1570,7 @@ def update_spring_assessment_status():
                     "batchname": batchname,
                     "name": name,
                     "phone": phone,
-                    "questioname": questionname,
+                    "questionname": questionname,
                     "status": status,
                     "testresults": testresults,
                     "score": score
@@ -1585,7 +1585,7 @@ def update_spring_assessment_status():
                 "name": name,
                 "email": email,
                 "phone": phone,
-                "questioname": questionname,
+                "questionname": questionname,
                 "status": status,
                 "testresults": testresults,
                 "score": score
