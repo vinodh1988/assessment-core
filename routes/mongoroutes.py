@@ -1466,7 +1466,7 @@ def get_spring_assessment_details(assessmentcode):
         spring_assessment_status_collection = mongo_assessments.db.spring_boot_assessment_status
 
         # Retrieve the assessment status based on the assessmentcode
-        assessment_status = spring_assessment_status_collection.find_one({"assessmentcode": assessmentcode,email: email}, {"_id": 0})
+        assessment_status = spring_assessment_status_collection.find_one({"assessmentcode": assessmentcode,"email": email}, {"_id": 0})
 
         print("Log_1",assessment_status)
         app.logger.info("Log_1",assessment_status)
