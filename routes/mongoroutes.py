@@ -1530,3 +1530,68 @@ def get_spring_boot_file(fname):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/spring-assessments/status', methods=['POST'])
+def update_spring_assessment_status():
+    try:
+        # Get JSON data from request
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+
+        # Validate required fields
+        required_fields = ['assessmentcode', 'batchname', 'name', 'email', 'phone', 'status', 'testresults', 'score']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+
+        assessmentcode = data['assessmentcode']
+        batchname = data['batchname']
+        name = data['name']
+        email = data['email']
+        phone = data['phone']
+        status = data['status']
+        testresults = data['testresults']
+        score = data['score']
+
+        # Access the spring_boot_assessment_status collection
+        status_collection = mongo_assessments.db.spring_boot_assessment_status
+
+        # Check if a record with the same email and assessmentcode exists
+        existing_record = status_collection.find_one({"email": email, "assessmentcode": assessmentcode})
+
+        if existing_record:
+            # Update the existing record
+            status_collection.update_one(
+                {"_id": existing_record['_id']},
+                {"$set": {
+                    "batchname": batchname,
+                    "name": name,
+                    "phone": phone,
+                    "status": status,
+                    "testresults": testresults,
+                    "score": score
+                }}
+            )
+            return jsonify({"message": "Record updated successfully"}), 200
+        else:
+            # Create a new record
+            new_record = {
+                "assessmentcode": assessmentcode,
+                "batchname": batchname,
+                "name": name,
+                "email": email,
+                "phone": phone,
+                "status": status,
+                "testresults": testresults,
+                "score": score
+            }
+            result = status_collection.insert_one(new_record)
+            return jsonify({
+                "message": "Record created successfully",
+                "inserted_id": str(result.inserted_id)  # Return the MongoDB ObjectId
+            }), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
