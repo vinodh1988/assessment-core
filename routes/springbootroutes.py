@@ -8,7 +8,7 @@ import requests
 import threading
 from utils import  replace_java_folder,build_project,terminate_application,run_application,run_employee_tests,run_product_tests,run__itenerary_tests
 from config import app
-UPLOAD_FOLDER = "/home/azureuser/spring-code-uploads"
+UPLOAD_FOLDER = "/home/ubuntu/spring-code-uploads"
 MAX_FILE_SIZE = 50 * 1024  # 50KB
 LOCK = threading.Lock()  # Global lock for synchronization
 
@@ -26,8 +26,8 @@ def validate_file_size(file):
 
 @app.route('/spring-assessments/spring-upload', methods=['POST'])
 def upload_and_process():
-    # Clear the contents of /home/azureuser/h2db folder
-    h2db_folder = "/home/azureuser/h2db"
+    # Clear the contents of /home/ubuntu/h2db folder
+    h2db_folder = "/home/ubuntu/h2db"
     for filename in os.listdir(h2db_folder):
         file_path = os.path.join(h2db_folder, filename)
         try:
@@ -62,7 +62,7 @@ def upload_and_process():
     with LOCK:
         try:
             # Workflow execution
-            project_path = "/home/azureuser/demo-1"
+            project_path = "/home/ubuntu/demo-1"
             zip_path = UPLOAD_FOLDER
             replace_java_folder(file_path, zip_path, project_path)
             build_project(project_path)
